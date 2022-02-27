@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Music Query App</title>
+        <meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <h1>Music Query App</h1>
+        <form action="" method="GET" id="musicQueryForm">
+            <label for="artistSearch">Search Artist:</label>
+            <input type="text" name="artistSearch" class="search" placeholder="The 1975"><br>
+            <label for="songSearch">Search Song Name:</label>
+            <input type="text" name="songSearch" class="search" placeholder="Sincerity is Scary">
+            <input type="submit">
+        </form>
+        <div id="results">
+            <iframe width="420" height="315" src="" id="youtubeVid"></iframe>
+            <br><a href="" id="spotifyLink">Spotify Link</a>
+        </div>
+    </body>
+    <script type="module" src="bundle.js"></script>
+</html>
