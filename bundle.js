@@ -1,7 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
 Use this command to bundle after making edits:
-node_modules/.bin/browserify geniusQuery.js > bundle.js
+browserify geniusQuery.js > bundle.js
 */
 
 var axios = require("axios").default;
@@ -13,6 +13,7 @@ var song_id = 0;
 var youtubeLink = "";
 var youtubeVidId = "";
 var spotifyLink = "";
+var songartURL = "";
 const queryForm = document.forms['musicQueryForm'];
 
 // procedure
@@ -20,12 +21,12 @@ queryForm.addEventListener('submit',function(e){
   e.preventDefault();
   artist = queryForm.querySelector('input[name="artistSearch"]').value;
   song = queryForm.querySelector('input[name="songSearch"]').value;
-  getLinks(artist, song);
+  geniusQuery(artist, song);
 });
 
 
 // functions
-function getLinks(parmArtist, parmSong) {
+function geniusQuery(parmArtist, parmSong) {
   var options = {
     method: 'GET',
     url: "https://genius.p.rapidapi.com/search",
@@ -36,9 +37,12 @@ function getLinks(parmArtist, parmSong) {
     }
   };
   
+  // raw search to get song id
   axios.request(options).then(function (response) {
-      //console.log(typeof response.data.response.hits)
     song_id = response.data.response.hits[0].result.id;
+    console.log(response.data.response.hits[0]);
+    songartURL = response.data.response.hits[0].result.song_art_image_url;
+    document.getElementById("songart").src = songartURL;
   
       var song_options = {
           method: 'GET',
@@ -49,6 +53,7 @@ function getLinks(parmArtist, parmSong) {
           }
       }
   
+      // search with specific song id
       axios.request(song_options).then(function (response) {
           //console.log(response.data.response.song.media);
           //console.log(response.data.response.song.media[0].url);
@@ -66,16 +71,13 @@ function getLinks(parmArtist, parmSong) {
           }
           document.getElementById("spotifyLink").href = spotifyLink;
           document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
+          document.getElementById("spotifyLink").innerHTML = spotifyLink;
       }).catch(function (error) {
           console.error(error);
       });
   }).catch(function (error) {
     console.error(error);
   });
-}
-
-function cutYouTubeLink(link) {
-
 }
 
 // setup export for browserify
