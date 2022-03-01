@@ -24,6 +24,7 @@ queryForm.addEventListener('submit',function(e){
   e.preventDefault();
   artist = queryForm.querySelector('input[name="artistSearch"]').value;
   song = queryForm.querySelector('input[name="songSearch"]').value;
+  songFactsList.innerHTML = "";
   geniusQuery(artist, song);
 });
 
@@ -60,18 +61,23 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          //console.log(response.data.response.song);
+          console.log(response.data.response.song);
           //console.log(response.data.response.song.description.dom.children)
+
+          // parse for song facts
           response.data.response.song.description.dom.children.forEach(element => {
             if (element != "") {
-              console.log(element.children);
               element.children.forEach(subelement => {
                 if (typeof(subelement) === 'string') {
-                  songFactsList.innerHTML += "<li>" + subelement + "..." + "</li>"
+                  songFactsList.innerHTML += "<li>" + subelement + "...</li>";
+                } else if (subelement.tag === "a") {
+                  songFactsList.innerHTML += "<a href='" + subelement.attributes.href + "'>" + subelement.attributes.href + "</a>";
                 }
               });
             }
           });
+
+          // parse for media links 
           for (var i = 0; i < 3; i++) {
             switch(response.data.response.song.media[i].provider) {
               case "youtube":
@@ -87,6 +93,9 @@ function geniusQuery(parmArtist, parmSong) {
           document.getElementById("spotifyLink").href = spotifyLink;
           document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
           document.getElementById("spotifyLink").innerHTML = spotifyLink;
+
+          // parse for artist image
+          document.getElementById("artistImage").src = response.data.response.song.primary_artist.image_url;
       }).catch(function (error) {
           console.error(error);
       });
