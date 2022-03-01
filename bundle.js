@@ -11,12 +11,12 @@ var artist = "";
 var song = "";
 var song_id = 0;
 var youtubeLink = "";
-var youtubeVidId = "";
 var spotifyLink = "";
 var songartURL = "";
 var lyricsLink = "";
 
 const songFactsList = document.getElementById("songFactsList");
+const writersDiv = document.getElementById("writersDiv");
 const queryForm = document.forms['musicQueryForm'];
 
 // procedure
@@ -25,6 +25,7 @@ queryForm.addEventListener('submit',function(e){
   artist = queryForm.querySelector('input[name="artistSearch"]').value;
   song = queryForm.querySelector('input[name="songSearch"]').value;
   songFactsList.innerHTML = "";
+  writersDiv.innerHTML = "";
   geniusQuery(artist, song);
 });
 
@@ -52,7 +53,7 @@ function geniusQuery(parmArtist, parmSong) {
     document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
     document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
 
-    console.log(response.data.response.hits[0].result);
+    //console.log(response.data.response.hits[0].result);
   
       var song_options = {
           method: 'GET',
@@ -65,7 +66,7 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          //console.log(response.data.response.song);
+          console.log(response.data.response.song.writer_artists);
           //console.log(response.data.response.song.description.dom.children)
 
           // parse for song facts
@@ -98,8 +99,15 @@ function geniusQuery(parmArtist, parmSong) {
           document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
           document.getElementById("spotifyLink").innerHTML = spotifyLink;
 
-          // parse for artist image
+          // parse for writer info
+          writersDiv.innerHTML = "<h3>Writers</h3>"
+          response.data.response.song.writer_artists.forEach(writer => {
+            writersDiv.innerHTML += "<a href='" + writer.url + "'><p>" + writer.name + "</p><img src='" + writer.image_url + "'><br>"; 
+          });
+
+          // parse for additional info
           document.getElementById("artistImage").src = response.data.response.song.primary_artist.image_url;
+          
       }).catch(function (error) {
           console.error(error);
       });
