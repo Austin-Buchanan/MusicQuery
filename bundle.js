@@ -49,6 +49,10 @@ function geniusQuery(parmArtist, parmSong) {
     lyricsLink = response.data.response.hits[0].result.url;
     document.getElementById("geniusLink").href = lyricsLink;
     document.getElementById("geniusLink").innerHTML = lyricsLink;
+    document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
+    document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
+
+    console.log(response.data.response.hits[0].result);
   
       var song_options = {
           method: 'GET',
@@ -61,7 +65,7 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          console.log(response.data.response.song);
+          //console.log(response.data.response.song);
           //console.log(response.data.response.song.description.dom.children)
 
           // parse for song facts
