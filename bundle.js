@@ -6,7 +6,7 @@ browserify geniusQuery.js > bundle.js
 
 var axios = require("axios").default;
 
-// variables
+// variables and constants
 var artist = "";
 var song = "";
 var song_id = 0;
@@ -14,6 +14,9 @@ var youtubeLink = "";
 var youtubeVidId = "";
 var spotifyLink = "";
 var songartURL = "";
+var lyricsLink = "";
+
+const songFactsList = document.getElementById("songFactsList");
 const queryForm = document.forms['musicQueryForm'];
 
 // procedure
@@ -40,9 +43,11 @@ function geniusQuery(parmArtist, parmSong) {
   // raw search to get song id
   axios.request(options).then(function (response) {
     song_id = response.data.response.hits[0].result.id;
-    console.log(response.data.response.hits[0]);
     songartURL = response.data.response.hits[0].result.song_art_image_url;
     document.getElementById("songart").src = songartURL;
+    lyricsLink = response.data.response.hits[0].result.url;
+    document.getElementById("geniusLink").href = lyricsLink;
+    document.getElementById("geniusLink").innerHTML = lyricsLink;
   
       var song_options = {
           method: 'GET',
@@ -55,8 +60,18 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          //console.log(response.data.response.song.media);
-          //console.log(response.data.response.song.media[0].url);
+          //console.log(response.data.response.song);
+          //console.log(response.data.response.song.description.dom.children)
+          response.data.response.song.description.dom.children.forEach(element => {
+            if (element != "") {
+              console.log(element.children);
+              element.children.forEach(subelement => {
+                if (typeof(subelement) === 'string') {
+                  songFactsList.innerHTML += "<li>" + subelement + "..." + "</li>"
+                }
+              });
+            }
+          });
           for (var i = 0; i < 3; i++) {
             switch(response.data.response.song.media[i].provider) {
               case "youtube":
