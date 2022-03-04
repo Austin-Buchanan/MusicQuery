@@ -1,0 +1,33 @@
+h1 {
+    font-size: 32px;
+    text-align: center;
+    margin: 0;
+    padding: 20px 0;
+    text-shadow: 1px 1px 1px gray;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+html {
+    background-color:slategray
+}
+
+body {
+    width: 800px;
+    margin: 0 auto;
+    background-color: mistyrose;
+    padding: 0 20px 20px 20px;
+    border: 5px solid darkgray;
+    border-radius: 10px;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+#songart {
+    width: 300px;
+}

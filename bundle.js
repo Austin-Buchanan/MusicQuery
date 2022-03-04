@@ -52,8 +52,8 @@ function geniusQuery(parmArtist, parmSong) {
     document.getElementById("geniusLink").innerHTML = lyricsLink;
     document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
     document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
-
-    console.log(response.data.response.hits[0].result);
+    document.getElementById("artistLink").href = response.data.response.hits[0].result.primary_artist.url;
+    //console.log(response.data.response.hits[0].result);
   
       var song_options = {
           method: 'GET',
