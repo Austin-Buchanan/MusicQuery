@@ -103,12 +103,21 @@ function geniusQuery(parmArtist, parmSong) {
 
           // parse for writer info
           response.data.response.song.writer_artists.forEach(writer => {
-            writersDiv.innerHTML += "<a href='" + writer.url + "'><p>" + writer.name + "</p><img src='" + writer.image_url + "' width='500'><br>"; 
+            writersDiv.innerHTML += "<div class='writerBlock'><a href='" 
+            + writer.url + "'><p>" + writer.name + "</p><img src='" + writer.image_url 
+            + "'width='200px' class='writerImage'></div><br>"; 
           });
 
           // parse for additional info
           document.getElementById("artistImage").src = response.data.response.song.primary_artist.image_url;
-          
+
+          // apply css to new items
+          document.querySelectorAll(".writerBlock").forEach(element => {
+            element.style.width = "300px";
+            element.style.backgroundColor = "lightcyan";
+            element.style.borderRadius = "25px";
+            element.style.margin = "5px 5px 5px 5px"
+          });
       }).catch(function (error) {
           console.error(error);
       });

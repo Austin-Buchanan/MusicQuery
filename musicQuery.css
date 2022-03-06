@@ -8,6 +8,11 @@ h1 {
 
 h2 {
     font-size: 22px;
+    padding: 20px 0;
+}
+
+h3 {
+    font-size: 18px;
 }
 
 html {
@@ -25,9 +30,14 @@ body {
 
 img {
     display: block;
-    margin: 0 auto;
 }
 
-#songart {
-    width: 300px;
+#writersDiv {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
+#artistLink {
+    margin: 0 auto 0 auto;
 }
