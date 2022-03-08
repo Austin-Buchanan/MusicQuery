@@ -104,7 +104,7 @@ function geniusQuery(parmArtist, parmSong) {
           // parse for writer info
           response.data.response.song.writer_artists.forEach(writer => {
             writersDiv.innerHTML += "<div class='writerBlock'><a href='" 
-            + writer.url + "'><p>" + writer.name + "</p><img src='" + writer.image_url 
+            + writer.url + "'><p class='writerText'>" + writer.name + "</p><img src='" + writer.image_url 
             + "'width='200px' class='writerImage'></div><br>"; 
           });
 
@@ -118,6 +118,13 @@ function geniusQuery(parmArtist, parmSong) {
             element.style.borderRadius = "25px";
             element.style.margin = "5px 5px 5px 5px"
           });
+          document.querySelectorAll(".writerImage").forEach(element=> {
+            element.style.margin = "0 auto";
+          }); 
+          document.querySelectorAll(".writerText").forEach(element => {
+            element.style.margin = "0 auto";
+            element.style.textAlign = "center";
+          })
       }).catch(function (error) {
           console.error(error);
       });
