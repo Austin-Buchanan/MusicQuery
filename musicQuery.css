@@ -40,3 +40,19 @@ img {
 #artistLink {
     margin: 0 auto 0 auto;
 }
+
+#songart {
+    margin: 0 auto;
+}
+
+#songTitle {
+    text-align: center;
+}
+
+#artistImage {
+    margin: 0 auto;
+}
+
+#artistLink {
+    text-align: center;
+}

@@ -112,24 +112,30 @@ function geniusQuery(parmArtist, parmSong) {
           document.getElementById("artistImage").src = response.data.response.song.primary_artist.image_url;
 
           // apply css to new items
-          document.querySelectorAll(".writerBlock").forEach(element => {
-            element.style.width = "300px";
-            element.style.backgroundColor = "lightcyan";
-            element.style.borderRadius = "25px";
-            element.style.margin = "5px 5px 5px 5px"
-          });
-          document.querySelectorAll(".writerImage").forEach(element=> {
-            element.style.margin = "0 auto";
-          }); 
-          document.querySelectorAll(".writerText").forEach(element => {
-            element.style.margin = "0 auto";
-            element.style.textAlign = "center";
-          })
+          applyCSS();
       }).catch(function (error) {
           console.error(error);
       });
   }).catch(function (error) {
     console.error(error);
+  });
+}
+
+function applyCSS() {
+  document.querySelectorAll(".writerBlock").forEach(element => {
+    element.style.width = "300px";
+    element.style.backgroundColor = "lightcyan";
+    element.style.borderRadius = "25px";
+    element.style.margin = "5px 5px 5px 5px"
+  });
+
+  document.querySelectorAll(".writerImage").forEach(element=> {
+    element.style.margin = "0 auto";
+  }); 
+
+  document.querySelectorAll(".writerText").forEach(element => {
+    element.style.margin = "0 auto";
+    element.style.textAlign = "center";
   });
 }
 
