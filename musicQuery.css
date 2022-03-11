@@ -56,3 +56,7 @@ img {
 #artistLink {
     text-align: center;
 }
+
+#results {
+    display: none;
+}

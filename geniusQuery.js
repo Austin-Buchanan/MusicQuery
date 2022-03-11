@@ -11,10 +11,7 @@ var song = "";
 var song_id = 0;
 var youtubeLink = "";
 var spotifyLink = "";
-var songartURL = "";
-var lyricsLink = "";
 
-//const songFactsList = document.getElementById("songFactsList");
 const writersDiv = document.getElementById("writersDiv");
 const queryForm = document.forms['musicQueryForm'];
 
@@ -44,15 +41,12 @@ function geniusQuery(parmArtist, parmSong) {
   // raw search to get song id
   axios.request(options).then(function (response) {
     song_id = response.data.response.hits[0].result.id;
-    songartURL = response.data.response.hits[0].result.song_art_image_url;
-    document.getElementById("songart").src = songartURL;
-    lyricsLink = response.data.response.hits[0].result.url;
-    document.getElementById("geniusLink").href = lyricsLink;
-    document.getElementById("geniusLink").innerHTML = lyricsLink;
+    document.getElementById("songart").src = response.data.response.hits[0].result.song_art_image_url;
+    document.getElementById("geniusLink").href = response.data.response.hits[0].result.url;
+    document.getElementById("geniusLink").innerHTML = response.data.response.hits[0].result.url;
     document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
     document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
     document.getElementById("artistLink").href = response.data.response.hits[0].result.primary_artist.url;
-    //console.log(response.data.response.hits[0].result);
   
       var song_options = {
           method: 'GET',
@@ -65,9 +59,6 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          //console.log(response.data.response.song.writer_artists);
-          //console.log(response.data.response.song.description.dom.children)
-
           /*
           // parse for song facts
           response.data.response.song.description.dom.children.forEach(element => {
@@ -85,20 +76,28 @@ function geniusQuery(parmArtist, parmSong) {
 
           // parse for media links 
           for (var i = 0; i < 3; i++) {
-            switch(response.data.response.song.media[i].provider) {
-              case "youtube":
-                youtubeLink = response.data.response.song.media[i].url;
-                break;
-              case "spotify":
-                spotifyLink = response.data.response.song.media[i].url;
-                break;
-              default:
-                continue;
+            try {
+              switch(response.data.response.song.media[i].provider) {
+                case "youtube":
+                  youtubeLink = response.data.response.song.media[i].url;
+                  break;
+                case "spotify":
+                  spotifyLink = response.data.response.song.media[i].url;
+                  break;
+                default:
+                  continue;
+              }
+            } catch(e) {
+              console.log(e);
             }
           }
-          document.getElementById("spotifyLink").href = spotifyLink;
-          document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
-          document.getElementById("spotifyLink").innerHTML = spotifyLink;
+          try {
+            document.getElementById("spotifyLink").href = spotifyLink;
+            document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
+            document.getElementById("spotifyLink").innerHTML = spotifyLink;
+          } catch(e) {
+            console.log(e);
+          }
 
           // parse for writer info
           response.data.response.song.writer_artists.forEach(writer => {
@@ -112,15 +111,19 @@ function geniusQuery(parmArtist, parmSong) {
 
           // apply css to new items
           applyCSS();
+
       }).catch(function (error) {
-          console.error(error);
+          console.log(error);
       });
   }).catch(function (error) {
-    console.error(error);
+    console.log(error);
   });
 }
 
 function applyCSS() {
+  // unhide results div
+  document.getElementById("results").style.display = "block";
+
   document.querySelectorAll(".writerBlock").forEach(element => {
     element.style.width = "300px";
     element.style.backgroundColor = "lightcyan";

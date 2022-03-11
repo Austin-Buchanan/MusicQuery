@@ -12,10 +12,7 @@ var song = "";
 var song_id = 0;
 var youtubeLink = "";
 var spotifyLink = "";
-var songartURL = "";
-var lyricsLink = "";
 
-//const songFactsList = document.getElementById("songFactsList");
 const writersDiv = document.getElementById("writersDiv");
 const queryForm = document.forms['musicQueryForm'];
 
@@ -45,15 +42,12 @@ function geniusQuery(parmArtist, parmSong) {
   // raw search to get song id
   axios.request(options).then(function (response) {
     song_id = response.data.response.hits[0].result.id;
-    songartURL = response.data.response.hits[0].result.song_art_image_url;
-    document.getElementById("songart").src = songartURL;
-    lyricsLink = response.data.response.hits[0].result.url;
-    document.getElementById("geniusLink").href = lyricsLink;
-    document.getElementById("geniusLink").innerHTML = lyricsLink;
+    document.getElementById("songart").src = response.data.response.hits[0].result.song_art_image_url;
+    document.getElementById("geniusLink").href = response.data.response.hits[0].result.url;
+    document.getElementById("geniusLink").innerHTML = response.data.response.hits[0].result.url;
     document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
     document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
     document.getElementById("artistLink").href = response.data.response.hits[0].result.primary_artist.url;
-    //console.log(response.data.response.hits[0].result);
   
       var song_options = {
           method: 'GET',
@@ -66,9 +60,6 @@ function geniusQuery(parmArtist, parmSong) {
   
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          //console.log(response.data.response.song.writer_artists);
-          //console.log(response.data.response.song.description.dom.children)
-
           /*
           // parse for song facts
           response.data.response.song.description.dom.children.forEach(element => {
@@ -86,20 +77,28 @@ function geniusQuery(parmArtist, parmSong) {
 
           // parse for media links 
           for (var i = 0; i < 3; i++) {
-            switch(response.data.response.song.media[i].provider) {
-              case "youtube":
-                youtubeLink = response.data.response.song.media[i].url;
-                break;
-              case "spotify":
-                spotifyLink = response.data.response.song.media[i].url;
-                break;
-              default:
-                continue;
+            try {
+              switch(response.data.response.song.media[i].provider) {
+                case "youtube":
+                  youtubeLink = response.data.response.song.media[i].url;
+                  break;
+                case "spotify":
+                  spotifyLink = response.data.response.song.media[i].url;
+                  break;
+                default:
+                  continue;
+              }
+            } catch(e) {
+              console.log(e);
             }
           }
-          document.getElementById("spotifyLink").href = spotifyLink;
-          document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
-          document.getElementById("spotifyLink").innerHTML = spotifyLink;
+          try {
+            document.getElementById("spotifyLink").href = spotifyLink;
+            document.getElementById("youtubeVid").src = "https://www.youtube.com/embed/" + youtubeLink.substring(31);
+            document.getElementById("spotifyLink").innerHTML = spotifyLink;
+          } catch(e) {
+            console.log(e);
+          }
 
           // parse for writer info
           response.data.response.song.writer_artists.forEach(writer => {
@@ -113,15 +112,19 @@ function geniusQuery(parmArtist, parmSong) {
 
           // apply css to new items
           applyCSS();
+
       }).catch(function (error) {
-          console.error(error);
+          console.log(error);
       });
   }).catch(function (error) {
-    console.error(error);
+    console.log(error);
   });
 }
 
 function applyCSS() {
+  // unhide results div
+  document.getElementById("results").style.display = "block";
+
   document.querySelectorAll(".writerBlock").forEach(element => {
     element.style.width = "300px";
     element.style.backgroundColor = "lightcyan";
@@ -154,7 +157,7 @@ var buildFullPath = require('../core/buildFullPath');
 var parseHeaders = require('./../helpers/parseHeaders');
 var isURLSameOrigin = require('./../helpers/isURLSameOrigin');
 var createError = require('../core/createError');
-var defaults = require('../defaults');
+var transitionalDefaults = require('../defaults/transitional');
 var Cancel = require('../cancel/Cancel');
 
 module.exports = function xhrAdapter(config) {
@@ -269,7 +272,7 @@ module.exports = function xhrAdapter(config) {
     // Handle timeout
     request.ontimeout = function handleTimeout() {
       var timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
-      var transitional = config.transitional || defaults.transitional;
+      var transitional = config.transitional || transitionalDefaults;
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
@@ -357,7 +360,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-},{"../cancel/Cancel":5,"../core/buildFullPath":10,"../core/createError":11,"../defaults":17,"./../core/settle":15,"./../helpers/buildURL":20,"./../helpers/cookies":22,"./../helpers/isURLSameOrigin":25,"./../helpers/parseHeaders":27,"./../utils":30}],4:[function(require,module,exports){
+},{"../cancel/Cancel":5,"../core/buildFullPath":10,"../core/createError":11,"../defaults/transitional":18,"./../core/settle":15,"./../helpers/buildURL":21,"./../helpers/cookies":23,"./../helpers/isURLSameOrigin":26,"./../helpers/parseHeaders":28,"./../utils":31}],4:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -416,7 +419,7 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./cancel/Cancel":5,"./cancel/CancelToken":6,"./cancel/isCancel":7,"./core/Axios":8,"./core/mergeConfig":14,"./defaults":17,"./env/data":18,"./helpers/bind":19,"./helpers/isAxiosError":24,"./helpers/spread":28,"./utils":30}],5:[function(require,module,exports){
+},{"./cancel/Cancel":5,"./cancel/CancelToken":6,"./cancel/isCancel":7,"./core/Axios":8,"./core/mergeConfig":14,"./defaults":17,"./env/data":19,"./helpers/bind":20,"./helpers/isAxiosError":25,"./helpers/spread":29,"./utils":31}],5:[function(require,module,exports){
 'use strict';
 
 /**
@@ -715,7 +718,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"../helpers/buildURL":20,"../helpers/validator":29,"./../utils":30,"./InterceptorManager":9,"./dispatchRequest":12,"./mergeConfig":14}],9:[function(require,module,exports){
+},{"../helpers/buildURL":21,"../helpers/validator":30,"./../utils":31,"./InterceptorManager":9,"./dispatchRequest":12,"./mergeConfig":14}],9:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -771,7 +774,7 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":30}],10:[function(require,module,exports){
+},{"./../utils":31}],10:[function(require,module,exports){
 'use strict';
 
 var isAbsoluteURL = require('../helpers/isAbsoluteURL');
@@ -793,7 +796,7 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
   return requestedURL;
 };
 
-},{"../helpers/combineURLs":21,"../helpers/isAbsoluteURL":23}],11:[function(require,module,exports){
+},{"../helpers/combineURLs":22,"../helpers/isAbsoluteURL":24}],11:[function(require,module,exports){
 'use strict';
 
 var enhanceError = require('./enhanceError');
@@ -902,7 +905,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"../cancel/Cancel":5,"../cancel/isCancel":7,"../defaults":17,"./../utils":30,"./transformData":16}],13:[function(require,module,exports){
+},{"../cancel/Cancel":5,"../cancel/isCancel":7,"../defaults":17,"./../utils":31,"./transformData":16}],13:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1048,7 +1051,7 @@ module.exports = function mergeConfig(config1, config2) {
   return config;
 };
 
-},{"../utils":30}],15:[function(require,module,exports){
+},{"../utils":31}],15:[function(require,module,exports){
 'use strict';
 
 var createError = require('./createError');
@@ -1079,7 +1082,7 @@ module.exports = function settle(resolve, reject, response) {
 'use strict';
 
 var utils = require('./../utils');
-var defaults = require('./../defaults');
+var defaults = require('../defaults');
 
 /**
  * Transform the data for a request or a response
@@ -1099,13 +1102,14 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"./../defaults":17,"./../utils":30}],17:[function(require,module,exports){
+},{"../defaults":17,"./../utils":31}],17:[function(require,module,exports){
 (function (process){(function (){
 'use strict';
 
-var utils = require('./utils');
-var normalizeHeaderName = require('./helpers/normalizeHeaderName');
-var enhanceError = require('./core/enhanceError');
+var utils = require('../utils');
+var normalizeHeaderName = require('../helpers/normalizeHeaderName');
+var enhanceError = require('../core/enhanceError');
+var transitionalDefaults = require('./transitional');
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -1121,10 +1125,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = require('./adapters/xhr');
+    adapter = require('../adapters/xhr');
   } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
     // For node use HTTP adapter
-    adapter = require('./adapters/http');
+    adapter = require('../adapters/http');
   }
   return adapter;
 }
@@ -1146,11 +1150,7 @@ function stringifySafely(rawValue, parser, encoder) {
 
 var defaults = {
 
-  transitional: {
-    silentJSONParsing: true,
-    forcedJSONParsing: true,
-    clarifyTimeoutError: false
-  },
+  transitional: transitionalDefaults,
 
   adapter: getDefaultAdapter(),
 
@@ -1237,11 +1237,20 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 }).call(this)}).call(this,require('_process'))
-},{"./adapters/http":3,"./adapters/xhr":3,"./core/enhanceError":13,"./helpers/normalizeHeaderName":26,"./utils":30,"_process":31}],18:[function(require,module,exports){
+},{"../adapters/http":3,"../adapters/xhr":3,"../core/enhanceError":13,"../helpers/normalizeHeaderName":27,"../utils":31,"./transitional":18,"_process":32}],18:[function(require,module,exports){
+'use strict';
+
 module.exports = {
-  "version": "0.26.0"
+  silentJSONParsing: true,
+  forcedJSONParsing: true,
+  clarifyTimeoutError: false
 };
+
 },{}],19:[function(require,module,exports){
+module.exports = {
+  "version": "0.26.1"
+};
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1254,7 +1263,7 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1326,7 +1335,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":30}],21:[function(require,module,exports){
+},{"./../utils":31}],22:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1342,7 +1351,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     : baseURL;
 };
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1397,7 +1406,7 @@ module.exports = (
     })()
 );
 
-},{"./../utils":30}],23:[function(require,module,exports){
+},{"./../utils":31}],24:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1413,7 +1422,7 @@ module.exports = function isAbsoluteURL(url) {
   return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1428,7 +1437,7 @@ module.exports = function isAxiosError(payload) {
   return utils.isObject(payload) && (payload.isAxiosError === true);
 };
 
-},{"./../utils":30}],25:[function(require,module,exports){
+},{"./../utils":31}],26:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1498,7 +1507,7 @@ module.exports = (
     })()
 );
 
-},{"./../utils":30}],26:[function(require,module,exports){
+},{"./../utils":31}],27:[function(require,module,exports){
 'use strict';
 
 var utils = require('../utils');
@@ -1512,7 +1521,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":30}],27:[function(require,module,exports){
+},{"../utils":31}],28:[function(require,module,exports){
 'use strict';
 
 var utils = require('./../utils');
@@ -1567,7 +1576,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":30}],28:[function(require,module,exports){
+},{"./../utils":31}],29:[function(require,module,exports){
 'use strict';
 
 /**
@@ -1596,7 +1605,7 @@ module.exports = function spread(callback) {
   };
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 var VERSION = require('../env/data').version;
@@ -1680,7 +1689,7 @@ module.exports = {
   validators: validators
 };
 
-},{"../env/data":18}],30:[function(require,module,exports){
+},{"../env/data":19}],31:[function(require,module,exports){
 'use strict';
 
 var bind = require('./helpers/bind');
@@ -2031,7 +2040,7 @@ module.exports = {
   stripBOM: stripBOM
 };
 
-},{"./helpers/bind":19}],31:[function(require,module,exports){
+},{"./helpers/bind":20}],32:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
