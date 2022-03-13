@@ -15,6 +15,7 @@ var spotifyLink = "";
 
 const writersDiv = document.getElementById("writersDiv");
 const queryForm = document.forms['musicQueryForm'];
+const errorDiv = document.getElementById("errors");
 
 // procedure
 queryForm.addEventListener('submit',function(e){
@@ -41,6 +42,10 @@ function geniusQuery(parmArtist, parmSong) {
   
   // raw search to get song id
   axios.request(options).then(function (response) {
+    errorDiv.innerHTML = "";
+    if (!response.data.response.hits[0].hasOwnProperty('result')) {
+      errorDiv.innerHTML = "<p>No results found.</p>"
+    }
     song_id = response.data.response.hits[0].result.id;
     document.getElementById("songart").src = response.data.response.hits[0].result.song_art_image_url;
     document.getElementById("geniusLink").href = response.data.response.hits[0].result.url;
