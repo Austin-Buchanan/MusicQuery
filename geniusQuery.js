@@ -42,17 +42,17 @@ function geniusQuery(parmArtist, parmSong) {
   // raw search to get song id
   axios.request(options).then(function (response) {
     errorDiv.innerHTML = "";
-    if (!response.data.response.hits[0].hasOwnProperty('result')) {
+    if (response.data.response.hits.length < 1) {
       errorDiv.innerHTML = "<p>No results found.</p>"
-    }
-    song_id = response.data.response.hits[0].result.id;
-    document.getElementById("songart").src = response.data.response.hits[0].result.song_art_image_url;
-    document.getElementById("geniusLink").href = response.data.response.hits[0].result.url;
-    document.getElementById("geniusLink").innerHTML = response.data.response.hits[0].result.url;
-    document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
-    document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
-    document.getElementById("artistLink").href = response.data.response.hits[0].result.primary_artist.url;
-  
+    } else {
+      song_id = response.data.response.hits[0].result.id;
+      document.getElementById("songart").src = response.data.response.hits[0].result.song_art_image_url;
+      document.getElementById("geniusLink").href = response.data.response.hits[0].result.url;
+      document.getElementById("geniusLink").innerHTML = response.data.response.hits[0].result.url;
+      document.getElementById("songTitle").innerHTML = response.data.response.hits[0].result.full_title;
+      document.getElementById("artistName").innerHTML = response.data.response.hits[0].result.artist_names;
+      document.getElementById("artistLink").href = response.data.response.hits[0].result.primary_artist.url;
+
       var song_options = {
           method: 'GET',
           url: 'https://genius.p.rapidapi.com/songs/' + song_id,
@@ -61,7 +61,7 @@ function geniusQuery(parmArtist, parmSong) {
             'x-rapidapi-key': '8c17385caamshf96139bac447402p125206jsnd4cbd540fedd'
           }
       }
-  
+
       // search with specific song id
       axios.request(song_options).then(function (response) {
           /*
@@ -120,6 +120,7 @@ function geniusQuery(parmArtist, parmSong) {
       }).catch(function (error) {
           console.log(error);
       });
+    }
   }).catch(function (error) {
     console.log(error);
   });

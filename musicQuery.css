@@ -60,3 +60,7 @@ img {
 #results {
     display: none;
 }
+
+#writersDiv {
+    justify-content: center;
+}
