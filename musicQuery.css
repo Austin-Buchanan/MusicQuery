@@ -8,7 +8,6 @@ h1 {
 
 h2 {
     font-size: 22px;
-    padding: 20px 0;
 }
 
 h3 {
@@ -20,7 +19,7 @@ html {
 }
 
 body {
-    width: 800px;
+    width: 1000px;
     margin: 0 auto;
     background-color: mistyrose;
     padding: 0 20px 20px 20px;
@@ -65,7 +64,7 @@ img {
 #resultTop {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 5px;
+    gap: 20px;
     grid-auto-rows: minmax(150px, auto);
 }
 
@@ -79,3 +78,10 @@ img {
     grid-row: 1;
 }
 
+#musicQueryForm {
+    margin: 20px auto 10px auto;
+    border: 4px solid lightgray;
+    padding: 20px 5px 20px 5px;
+    border-radius: 15px;
+    background: lightcyan;
+}
