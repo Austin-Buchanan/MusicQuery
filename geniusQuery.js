@@ -131,14 +131,15 @@ function applyCSS() {
   document.getElementById("results").style.display = "block";
 
   document.querySelectorAll(".writerBlock").forEach(element => {
-    element.style.width = "300px";
     element.style.backgroundColor = "lightcyan";
-    element.style.borderRadius = "25px";
+    element.style.borderRadius = "15px";
     element.style.margin = "5px 5px 5px 5px"
+    element.style.border = "5px solid lightgray";
+    element.style.padding = "20px 15px 0 15px";
   });
 
   document.querySelectorAll(".writerImage").forEach(element=> {
-    element.style.margin = "0 auto";
+    element.style.margin = "10px auto";
   }); 
 
   document.querySelectorAll(".writerText").forEach(element => {
