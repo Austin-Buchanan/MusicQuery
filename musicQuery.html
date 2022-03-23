@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Music Query App</title>
         <meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link href="musicQuery.css" rel="stylesheet">
     </head>
     <body>
         <h1>Music Query App</h1>
-        <form action="" method="GET" id="musicQueryForm">
+        <form action="" method="GET" id="musicQueryForm" class="container-fluid">
             <label for="artistSearch">Search Artist:</label>
             <input type="text" name="artistSearch" class="search" placeholder="The 1975"><br>
             <label for="songSearch">Search Song Name:</label>
@@ -16,34 +19,27 @@
             <input type="submit">
         </form>
         <div id="errors"></div>
-        <div id="results">
-            <div id="resultTop">
-                <div id="songDiv">
+        <div id="results" class="container-fluid">
+            <div id="resultTop" class="container-fluid row">
+                <div id="songDiv" class="container-fluid col-sm-6">
                     <h2 id="songTitle"></h2>
-                    <img src="" id="songart" width="300px" alt="Song art">
+                    <img src="" id="songart" alt="Song art" class="img-responsive">
                 </div>
-                <div id="linkDiv">
-                    <a href="" id="artistLink"><p id="artistName"></p></a>
-                    <img src="" id="artistImage" width="200px" alt="Artist image">
-                    <p>Spotify Link: </p><a href="" id="spotifyLink"></a>
-                    <p>Genius Lyrics Link: </p><a href="" id="geniusLink"></a>
+                <div id="linkDiv" class="container-fluid col-sm-6">
+                    <a href="" id="artistLink"><h3 id="artistName"></h3></a>
+                    <img src="" id="artistImage" alt="Artist image" class="img-responsive"><br>
+                    <div class="well well-sm">
+                        <p>Spotify Link: </p><a href="" id="spotifyLink"></a>
+                        <p>Genius Lyrics Link: </p><a href="" id="geniusLink"></a>
+                    </div>
                 </div>
             </div>
-            <div id="youtubeDiv">
-                <iframe width="800" height="450" src="" id="youtubeVid"></iframe>
+            <div id="youtubeDiv" class="embed-responsive embed-responsive-16by9">
+                <iframe src="" id="youtubeVid" class="embed-responsive-item"></iframe>
             </div>
 
-            <!--
-            <div id="songFactsDiv">
-                <br><h3>Song Facts</h3>
-                <ul id="songFactsList">
-                    
-                </ul>
-            </div>
-            -->
-
-            <h3>Writers</h3>
-            <div id="writersDiv">
+            <h2>Writers</h2>
+            <div id="writersDiv" class="container-fluid">
                 
             </div>
         </div>

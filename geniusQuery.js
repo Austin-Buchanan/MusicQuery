@@ -64,21 +64,6 @@ function geniusQuery(parmArtist, parmSong) {
 
       // search with specific song id
       axios.request(song_options).then(function (response) {
-          /*
-          // parse for song facts
-          response.data.response.song.description.dom.children.forEach(element => {
-            if (element != "") {
-              element.children.forEach(subelement => {
-                if (typeof(subelement) === 'string') {
-                  songFactsList.innerHTML += "<li>" + subelement + "...</li>";
-                } else if (subelement.tag === "a") {
-                  songFactsList.innerHTML += "<a href='" + subelement.attributes.href + "'>" + subelement.attributes.href + "</a>";
-                }
-              });
-            }
-          });
-          */
-
           // parse for media links 
           for (var i = 0; i < 3; i++) {
             try {
@@ -108,7 +93,7 @@ function geniusQuery(parmArtist, parmSong) {
           response.data.response.song.writer_artists.forEach(writer => {
             writersDiv.innerHTML += "<div class='writerBlock'><a href='" 
             + writer.url + "'><p class='writerText'>" + writer.name + "</p><img src='" + writer.image_url 
-            + "'width='200px' class='writerImage'></div><br>"; 
+            + "'width='200px' class='writerImage img-responsive'></div><br>"; 
           });
 
           // parse for additional info
