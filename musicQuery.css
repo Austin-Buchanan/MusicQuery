@@ -1,3 +1,7 @@
+a {
+    word-wrap: break-word;
+}
+
 h1 {
     font-size: 32px;
     text-align: center;
@@ -16,7 +20,7 @@ html {
 }
 
 body {
-    margin: 0 auto;
+    margin: 0 20px;
     background-color: mistyrose;
     padding: 0 20px 20px 20px;
     border: 5px solid darkgray;
@@ -25,6 +29,16 @@ body {
 
 img {
     display: block;
+}
+
+iframe {
+    max-width: 800px;
+    max-height: 450px;
+    margin: 0 auto;
+}
+
+p {
+    margin-bottom: 0;
 }
 
 #writersDiv {
@@ -80,5 +94,10 @@ img {
 }
 
 #youtubeDiv {
-    margin: 0 auto 40px auto;
+    max-width: 800px;
+    max-height: 450px;
+}
+
+#youtubeRow {
+    max-height: 450px;
 }
